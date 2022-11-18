@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react'
+
+const allItems = [
+  {id: 'apple', value: '🍎 apple'},
+  {id: 'orange', value: '🍊 orange'},
+  {id: 'grape', value: '🍇 grape'},
+  {id: 'pear', value: '🍐 pear'},
+]
 
 function App() {
+  const [items, setItems] = React.useState(allItems)
+
+  function addItem() {
+    const itemIds = items.map(i => i.id)
+    setItems([...items, allItems.find(i => !itemIds.includes(i.id))])
+  }
+
+  function removeItem(item) {
+    setItems(items.filter(i => i.id !== item.id))
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="keys">
+      <button disabled={items.length >= allItems.length} onClick={addItem}>
+        add item
+      </button>
+      <ul style={{listStyle: 'none', paddingLeft: 0}}>
+        {items.map(item => (
+          <li key={item.id}>
+            <button onClick={() => removeItem(item)}>remove</button>{' '}
+            <label htmlFor={`${item.id}-input`}>{item.value}</label>{' '}
+            <input id={`${item.id}-input`} defaultValue={item.value} />
+          </li>
+        ))}
+      </ul>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
+
